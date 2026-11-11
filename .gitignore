@@ -1,0 +1,4 @@
+build/
+flash/
+*.bin
+reference/
