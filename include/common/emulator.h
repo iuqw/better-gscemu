@@ -2,6 +2,7 @@
 #define EMULATOR_H
 
 #include <stdbool.h>
+#include <unicorn/unicorn.h>
 
 #include <libargs.h>
 
@@ -9,9 +10,9 @@ typedef struct Emulator Emulator;
 
 struct Emulator {
   bool ready;
-  void (*initialize)(Emulator *chipemu, ArgCheck *ac);
-  void (*start_emulation)(void);
-  void (*end_emulation)(void);
+  uc_engine *(*initialize)(Emulator *chipemu, ArgCheck *ac);
+  void (*start_emulation)(uc_engine *uc);
+  void (*end_emulation)(uc_engine *uc);
 };
 
 typedef enum {

@@ -18,7 +18,7 @@ Emulator get_chipemu(EmulatorChips chip, ArgCheck *ac) {
       chipemu.end_emulation = Havn_EndEmulation;
       return chipemu;
     default:
-      emu_exit(-1, ac, NULL);
+      emu_exit(-1, ac, NULL, NULL);
   }
 
   return chipemu;
@@ -32,6 +32,7 @@ int main(int argc, char **argv) {
 
   const char *chip = argcheck_fequals(ac, "--chip", "-c", "Chip to emulate [ h1b3c | h1c3m | h1d3c | h1d3m | npcx ]");
   int verbose = argcheck_fbool(ac, "--verbose", "-v", "Verbose output");
+  if (verbose) isVerboseLogging = true;
 
   argcheck_check_help(ac);
 
@@ -43,22 +44,20 @@ int main(int argc, char **argv) {
     chipType = H1B3C;
   } else {
     LOG_ERR("Invalid chip passed!\n");
-    emu_exit(-1, ac, NULL);
+    emu_exit(-1, ac, NULL, NULL);
   }
-
-  if (verbose) LOG_VBS("verbose output enabled\n");
 
   Emulator chipemu = get_chipemu(chipType, ac);
 
-  chipemu.initialize(&chipemu, ac);
+  uc_engine *uc = chipemu.initialize(&chipemu, ac);
   if (!chipemu.ready) {
-    emu_exit(0, ac, &chipemu);
+    emu_exit(0, ac, &chipemu, uc);
   }
 
-  chipemu.start_emulation();
+  chipemu.start_emulation(uc);
 
   /* Emulation is done, end it. */
-  chipemu.end_emulation();
+  chipemu.end_emulation(uc);
 
   argcheck_destroy(ac);
   return 0;

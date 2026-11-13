@@ -1,12 +1,16 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include <stdbool.h>
+
 typedef enum {
   NORMAL = 0,
   ERROR = 1,
   VERBOSE = 2,
   LOGTYPE_END
 } LogType;
+
+extern bool isVerboseLogging;
 
 #define LOG(msg, ...) log_internal(NORMAL, __FILE__, __LINE__, msg, ##__VA_ARGS__)
 #define LOG_ERR(msg, ...) log_internal(ERROR, __FILE__, __LINE__, msg, ##__VA_ARGS__)

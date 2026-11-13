@@ -1,10 +1,11 @@
 CC ?= gcc
-CFLAGS ?= -O2 -g
+PKG_CONFIG ?= pkg-config 
+CFLAGS ?= -O2 -g $(shell $(PKG_CONFIG) --cflags unicorn)
 CFLAGS += -std=c11 -Wall -Wextra -Wformat=2 -Werror=format-security -Werror=format-nonliteral -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fPIE
 CPPFLAGS ?=
 LDFLAGS ?=
-LDFLAGS += -pie -Wl,-z,relro,-z,now
-LDLIBS ?=
+LDFLAGS += -fno-pie -Wl,-z,relro,-z,now
+LDLIBS ?= $(shell $(PKG_CONFIG) --libs unicorn)
 
 ARCH := $(shell uname -m)
 PROJECT_DIR := $(abspath .)

@@ -6,6 +6,6 @@
 #include <libargs.h>
 #include <common/emulator.h>
 
-ARGCHECK_NORETURN void emu_exit(uint32_t rc, ArgCheck *ac, Emulator *chipemu);
+ARGCHECK_NORETURN void emu_exit(uint32_t rc, ArgCheck *ac, Emulator *chipemu, uc_engine *uc);
 
 #endif /* EXIT_H */

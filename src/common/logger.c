@@ -4,6 +4,8 @@
 #include <common/exit.h>
 #include <common/logger.h>
 
+bool isVerboseLogging = false;
+
 void log_internal(LogType logtype, const char *file, int line, const char *msg, ...) {
   const char *tag = "";
   va_list args;
@@ -16,12 +18,16 @@ void log_internal(LogType logtype, const char *file, int line, const char *msg, 
       tag = "ERROR";
       break;
     case VERBOSE:
-      tag = "VERBOSE";
+      if (isVerboseLogging) {
+        tag = "VERBOSE";
+      } else {
+        return;
+      }
       break;
     default:
       /* Something has gone wrong, halt emulation immediately. */
       printf("ERROR!! Invalid logType passed!");
-      emu_exit(-1, NULL, NULL);
+      emu_exit(-1, NULL, NULL, NULL);
       break;
   }
 
