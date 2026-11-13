@@ -35,6 +35,7 @@ Run the binary directly:
 - `src/H1B3C/` - Haven chip backend (H1B3C).
 - `tests/` - libFuzzer harness, dictionary, and seed corpus.
 - `include/` - public headers; implementation stays in `src/`.
+- `.opencode/skills/` - repo-local skills for fuzzing, chip work, libargs, and verification.
 
 Examples belong in `examples/`. Reference material belongs in `reference/`, which is ignored. `flash/` and `build/` are generated or local-only; never edit or commit them.
 
