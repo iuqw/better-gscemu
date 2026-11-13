@@ -4,6 +4,9 @@
 #define FLASH_ROM_BASE 0x00000000
 #define FLASH_ROM_SIZE (8 * 1024) /* 8KiB */
 
+#define SRAM_BASE 0x10000
+#define SRAM_SIZE (64 * 1024) /* 64KiB */
+
 /*
 INFO is split into two regions:
 - INFO0: 0x20000 (size: 0x800)
