@@ -215,6 +215,11 @@ ARGCHECK_NORETURN void argcheck_show_help(const ArgCheck *ac) {
     int col_w;
     int i;
 
+    if ((size_t)ac->flag_count > SIZE_MAX / sizeof(FlagInfo *)) {
+      printf("  %-20s %s\n", "-h, --help", "Show this help message");
+      exit(0);
+    }
+
     sorted = malloc((size_t)ac->flag_count * sizeof(FlagInfo *));
     if (!sorted) {
       printf("  %-20s %s\n", "-h, --help", "Show this help message");

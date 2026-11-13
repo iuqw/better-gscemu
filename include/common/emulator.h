@@ -5,12 +5,14 @@
 
 #include <libargs.h>
 
-typedef struct {
+typedef struct Emulator Emulator;
+
+struct Emulator {
   bool ready;
-  void (*initialize)(ArgCheck *ac);
+  void (*initialize)(Emulator *chipemu, ArgCheck *ac);
   void (*start_emulation)(void);
   void (*end_emulation)(void);
-} Emulator;
+};
 
 typedef enum {
   H1B3C = 0,

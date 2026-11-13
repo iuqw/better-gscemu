@@ -13,7 +13,6 @@ Emulator get_chipemu(EmulatorChips chip, ArgCheck *ac) {
 
   switch (chip) {
     case H1B3C:
-      chipemu.ready = true;
       chipemu.initialize = Havn_Initialize;
       chipemu.start_emulation = Havn_StartEmulation;
       chipemu.end_emulation = Havn_EndEmulation;
@@ -43,7 +42,6 @@ int main(int argc, char **argv) {
   if (strcmp(chip, "h1b3c") == 0) {
     chipType = H1B3C;
   } else {
-    chipType = EMULATORCHIPS_END;
     LOG_ERR("Invalid chip passed!\n");
     emu_exit(-1, ac, NULL);
   }
@@ -52,7 +50,7 @@ int main(int argc, char **argv) {
 
   Emulator chipemu = get_chipemu(chipType, ac);
 
-  chipemu.initialize(ac);
+  chipemu.initialize(&chipemu, ac);
   if (!chipemu.ready) {
     emu_exit(0, ac, &chipemu);
   }

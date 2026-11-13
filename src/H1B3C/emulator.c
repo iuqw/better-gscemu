@@ -1,13 +1,17 @@
+#include <stdbool.h>
+
 #include <libargs.h>
 #include <common/logger.h>
+#include <common/emulator.h>
 #include <H1B3C/emulator.h>
 
-void Havn_Initialize(ArgCheck *ac) {
+void Havn_Initialize(Emulator *chipemu, ArgCheck *ac) {
   LOG("initialized\n");
   (void)ac;
 }
 
 void Havn_StartEmulation(void) {
+
   LOG("started emu\n");
 }
 

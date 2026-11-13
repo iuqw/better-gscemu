@@ -1,7 +1,9 @@
 CC ?= gcc
-CFLAGS ?= -std=c11 -O2 -g -Wall -Wextra
+CFLAGS ?= -O2 -g
+CFLAGS += -std=c11 -Wall -Wextra -Wformat=2 -Werror=format-security -Werror=format-nonliteral -fstack-protector-strong -D_FORTIFY_SOURCE=2 -fPIE
 CPPFLAGS ?=
 LDFLAGS ?=
+LDFLAGS += -pie -Wl,-z,relro,-z,now
 LDLIBS ?=
 
 ARCH := $(shell uname -m)
