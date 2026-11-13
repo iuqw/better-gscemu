@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <common/rc.h>
+
 typedef struct {
   char *long_name;
   char *short_name;
@@ -206,7 +208,7 @@ ARGCHECK_NORETURN void argcheck_show_help(const ArgCheck *ac) {
 
   if (!ac || ac->flag_count == 0) {
     printf("  %-20s %s\n", "-h, --help", "Show this help message");
-    exit(0);
+    exit(RC_SUCCESS);
   }
 
   {
@@ -217,13 +219,13 @@ ARGCHECK_NORETURN void argcheck_show_help(const ArgCheck *ac) {
 
     if ((size_t)ac->flag_count > SIZE_MAX / sizeof(FlagInfo *)) {
       printf("  %-20s %s\n", "-h, --help", "Show this help message");
-      exit(0);
+      exit(RC_SUCCESS);
     }
 
     sorted = malloc((size_t)ac->flag_count * sizeof(FlagInfo *));
     if (!sorted) {
       printf("  %-20s %s\n", "-h, --help", "Show this help message");
-      exit(0);
+      exit(RC_SUCCESS);
     }
 
     for (i = 0; i < ac->flag_count; i++) sorted[i] = &ac->flags[i];
@@ -276,7 +278,7 @@ ARGCHECK_NORETURN void argcheck_show_help(const ArgCheck *ac) {
     free(sorted);
   }
 
-  exit(0);
+  exit(RC_SUCCESS);
 }
 
 int argcheck_flag_count(const ArgCheck *ac) {

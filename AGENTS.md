@@ -58,10 +58,24 @@ libargs:
 
 Emulator:
 
-- `get_chipemu` returns an `Emulator` with `initialize`, `start_emulation`, and `end_emulation` set.
-- `initialize(&chipemu, ac)` must set `chipemu->ready = true` only after successful setup. `main` exits when `ready` is false.
-- `start_emulation` and `end_emulation` take no arguments. `end_emulation` must tolerate a partially initialized backend because `emu_exit` may call it on failure.
-- `emu_exit` is `_Noreturn`: it calls `end_emulation` when given a backend, destroys the `ArgCheck`, and exits. Never call it with an already-destroyed `ac`, and never call `exit()` directly from emulator code.
+- `get_chipemu(chip)` fills `ctx.chipemu` with `initialize`, `start_emulation`, and `end_emulation`.
+- `initialize()` must set `ctx.chipemu.ready = true` only after successful setup. `main` exits when `ready` is false.
+- `start_emulation()` and `end_emulation()` take no arguments and use `ctx`. `end_emulation` must tolerate a partially initialized backend because `emu_exit` may call it on failure.
+- `emu_exit(Rc rc)` is `_Noreturn`: it calls `end_emulation` when one is set, destroys `ctx.ac`, and exits with `rc`. It clears `ctx.chipemu.end_emulation` and `ctx.ac` before running them, so a nested `emu_exit` cannot double-close or double-free. Never call `exit()` directly.
+
+Context:
+
+- `common/ctx.h` exposes one global `Ctx ctx` holding `ac`, `chip`, `chipemu`, `uc`, and `verbose`.
+- `ctx_init` zeroes the container; `main` calls it before touching anything else.
+- `ctx.verbose` is the only verbose switch. `LOG_VBS` reads it; do not add a second flag.
+- Ownership follows the field: `argcheck_destroy` frees `ctx.ac`, and a backend's `end_emulation` closes `ctx.uc` and sets it to NULL. Never destroy or close the same resource twice.
+
+Return codes:
+
+- `common/rc.h` defines `Rc`. Every `emu_exit` call, `exit` call, and `main` return uses an `RC_*` value; never pass a raw number.
+- `RC_SUCCESS` covers a normal run and the help path.
+- `RC_ARGCHECK_FAILED`, `RC_ARG_CHIP_INVALID`, `RC_CHIPEMU_FAILED_INIT`, `RC_CHIPEMU_UNSUPPORTED`, and `RC_LOGGER_INVALID_TYPE` cover failures.
+- Values are negative, so the process status is the low byte (`RC_ARG_CHIP_INVALID` reports as 254). Add a new `RC_*` value instead of reusing an unrelated one.
 
 ## Security rules
 

@@ -1,10 +1,10 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#include <common/ctx.h>
 #include <common/exit.h>
 #include <common/logger.h>
-
-bool isVerboseLogging = false;
+#include <common/rc.h>
 
 void log_internal(LogType logtype, const char *file, int line, const char *msg, ...) {
   const char *tag = "";
@@ -18,7 +18,7 @@ void log_internal(LogType logtype, const char *file, int line, const char *msg, 
       tag = "ERROR";
       break;
     case VERBOSE:
-      if (isVerboseLogging) {
+      if (ctx.verbose) {
         tag = "VERBOSE";
       } else {
         return;
@@ -27,7 +27,7 @@ void log_internal(LogType logtype, const char *file, int line, const char *msg, 
     default:
       /* Something has gone wrong, halt emulation immediately. */
       printf("ERROR!! Invalid logType passed!");
-      emu_exit(-1, NULL, NULL, NULL);
+      emu_exit(RC_LOGGER_INVALID_TYPE);
       break;
   }
 

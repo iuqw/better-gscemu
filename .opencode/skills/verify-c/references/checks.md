@@ -6,7 +6,7 @@
 - `./build/$(uname -m)/gscemu --help` exits 0 and prints usage plus registered flags.
 - `./build/$(uname -m)/gscemu` exits 0 and runs the H1B3C lifecycle.
 - `./build/$(uname -m)/gscemu --chip h1b3c -v` exits 0 and prints verbose logs.
-- `./build/$(uname -m)/gscemu --chip invalid` exits non-zero.
+- `./build/$(uname -m)/gscemu --chip invalid` exits with `RC_ARG_CHIP_INVALID` (254).
 - `make fuzz FUZZ_TIME=1` exits 0 with no ASan/UBSan report.
 
 ## Longer runs

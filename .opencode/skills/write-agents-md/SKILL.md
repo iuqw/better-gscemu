@@ -37,8 +37,10 @@ A nested file should contain only module-specific rules and gotchas. Do not copy
 
 - `argcheck_fequals` and `argcheck_fequals_str` return pointers valid only until `argcheck_destroy`.
 - `argcheck_destroy` is not idempotent and prints help/exits on `-h`/`--help`.
-- `emu_exit` is `_Noreturn` and destroys the `ArgCheck`.
-- `initialize` must set `chipemu->ready = true` after successful setup.
+- `emu_exit` is `_Noreturn`, takes an `Rc`, and destroys `ctx.ac`.
+- `common/ctx.h` holds the global `Ctx` and `ctx_init` zeroes it.
+- `common/rc.h` defines every exit code; no raw numbers.
+- `initialize` must set `ctx.chipemu.ready = true` after successful setup.
 - `LOG*` messages must be compile-time literals.
 - The fuzz harness filters `--help` and `-h` because destroy exits.
 - `make run` currently fails because it prepends `./` to an absolute `TARGET`.
