@@ -6,6 +6,7 @@
 #include <H1B3C/emulator.h>
 
 void Havn_Initialize(Emulator *chipemu, ArgCheck *ac) {
+  chipemu->ready = true;
   LOG("initialized\n");
   (void)ac;
 }
