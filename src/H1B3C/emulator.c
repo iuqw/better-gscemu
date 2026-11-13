@@ -156,12 +156,13 @@ void Havn_StartEmulation(void) {
   err = uc_emu_start(ctx.uc, pc, UINT32_MAX, 0, 0);
   if (err != UC_ERR_OK) {
     LOG_ERR("Emulation stopped with error: %s\n", uc_strerror(err));
+    uint32_t r0 = 0;
+    uc_reg_read(ctx.uc, UC_ARM_REG_R0, &r0);
+    LOG_ERR("Emulation finished: R0 = 0x%08X (expected 0xAABBCCDD)\n", r0);
     emu_exit(RC_CHIPEMU_EMULATION_ERROR);
   }
 
-  uint32_t r0 = 0;
-  uc_reg_read(ctx.uc, UC_ARM_REG_R0, &r0);
-  LOG("Emulation finished: R0 = 0x%08X (expected 0xAABBCCDD)\n", r0);
+  LOG_VBS("Emulation finished.\n");
 }
 
 void Havn_EndEmulation(void) {
